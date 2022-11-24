@@ -1,0 +1,12 @@
+version: "3"
+
+tasks:
+  lint:
+    desc: Lints the code and reports on issues.
+    cmds:
+      - |
+        poetry run flake8 myblog/myblog/ \
+        --show-source \
+        --statistics \
+        --count
+      - poetry run pylint myblog/myblog/
