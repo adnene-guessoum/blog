@@ -50,5 +50,12 @@ jobs:
           echo "PYTHONPATH=./myblog" >> $GITHUB_ENV
 
       - name: Lint code
+        env:
+          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+          SQL_DATABASE: ${{ secrets.SQL_DATABASE }}
+          SQL_HOST: ${{ secrets.SQL_HOST }}
+          SQL_PASSWORD: ${{ secrets.SQL_PASSWORD }}
+          SQL_PORT: ${{ secrets.SQL_PORT }}
+          SQL_USER: ${{ secrets.SQL_USER }}
         run: |
           ./bin/task lint
