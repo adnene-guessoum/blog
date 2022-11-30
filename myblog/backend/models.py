@@ -1,13 +1,16 @@
 """
     Modèles pour le blog
 """
-from datetime import datetime
+import datetime
 from django.db import models
+from django.contrib.auth import get_user_model
 
 # built-in function to standardize strings
 from django.template.defaultfilters import slugify
 
 # Create your models here.
+
+User = get_user_model()
 
 
 class Categories(models.TextChoices):
@@ -50,6 +53,7 @@ class Blogpost(models.Model):
 
     title = models.CharField(max_length=255, unique=True, verbose_name="Titre")
     slug = models.SlugField(max_length=255, unique=True, blank=True)
+    author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     category = models.CharField(
         max_length=50, choices=Categories.choices, default=Categories.OPINION
     )
@@ -60,9 +64,11 @@ class Blogpost(models.Model):
     excerpt = models.CharField(max_length=150)
     month = models.CharField(max_length=4)
     day = models.CharField(max_length=2)
-    content = models.TextField()
+    date_created = models.DateField(default=datetime.date.today(), blank=True)
+    last_updated = models.DateTimeField(auto_now=True)
     featured = models.BooleanField(default=False)
-    date_created = models.DateTimeField(default=datetime.now, blank=True)
+    published = models.BooleanField(default=False, verbose_name="Publié")
+    content = models.TextField(verbose_name="Corps")
 
     def __str__(self):
         """Représentation de la publication en string"""
