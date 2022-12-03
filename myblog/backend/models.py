@@ -57,7 +57,6 @@ class Blogpost(models.Model):
     category = models.CharField(
         max_length=50, choices=Categories.choices, default=Categories.OPINION
     )
-
     thumbnail = models.ImageField(upload_to="photos/%Y/%m/%d")
     # définir une image par défaut pour opinions ?
 
@@ -73,6 +72,12 @@ class Blogpost(models.Model):
     def __str__(self):
         """Représentation de la publication en string"""
         return self.title
+
+	def Meta:
+		''' méta-informations sur les publications
+		'''
+		ordering = ['-date_created']
+		verbose_name="Article"
 
     def save(self, *args, **kwargs):
         """sauvegarder un article à partir d'un slug unique"""

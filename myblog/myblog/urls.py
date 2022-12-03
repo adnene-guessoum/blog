@@ -16,13 +16,23 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+# Routers provide an easy way of automatically determining the URL conf.
+from rest_framework import routers
+
 # summernotes for debug=True
 from django.conf import settings
 from django.conf.urls.static import static
 
+# import view for user routing
+from . import views
+
+router = routers.DefaultRouter()
+router.register(r'users', views.UserViewSet)
+
 urlpatterns = [
+	path('', include(routers.urls))
+    path("api-auth/", include("rest_framework.urls", namespace='rest_framework')),
     path("summernote/", include("django_summernote.urls")),
-    path("api-auth/", include("rest_framework.urls")),
     path("admin/", admin.site.urls),
 ]
 
