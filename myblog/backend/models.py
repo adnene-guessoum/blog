@@ -18,11 +18,11 @@ class Categories(models.TextChoices):
     Categories des différents articles selon thème
 
     Attributs:
-        tech:           développement, programmation, tech
-        society:       société, économie, politique, monde
-        lect:           analyses et résumés de lectures et textes
-        entertainment: films, séries, jeux vidéo, musique
-        opinion:       actualités, op-ed de visiteurs, etc.
+                    tech:           développement, programmation, tech
+                    society:       société, économie, politique, monde
+                    lect:           analyses et résumés de lectures et textes
+                    entertainment: films, séries, jeux vidéo, musique
+                    opinion:       actualités, op-ed de visiteurs, etc.
     """
 
     TECH = "technologie"
@@ -37,15 +37,15 @@ class Blogpost(models.Model):
     une publication sur le blog
 
     Attributs:
-        title:          le titre de la publication
-        slug:          label pour url de la pub.
-        category:      categorie thématique de la pub.
-        thumbnail:      image d'illustration de la pub.
-        excerpt:      extrait du contenu de la pub.
-        month / day:  date de la pub.
-        content:      contenu de la pub.
-        featured:      si publication épinglée page d'accueil.
-        date_created: date création publication
+                    title:          le titre de la publication
+                    slug:          label pour url de la pub.
+                    category:      categorie thématique de la pub.
+                    thumbnail:      image d'illustration de la pub.
+                    excerpt:      extrait du contenu de la pub.
+                    month / day:  date de la pub.
+                    content:      contenu de la pub.
+                    featured:      si publication épinglée page d'accueil.
+                    date_created: date création publication
 
     Méthodes:
 
@@ -73,11 +73,11 @@ class Blogpost(models.Model):
         """Représentation de la publication en string"""
         return self.title
 
-	def Meta:
-		''' méta-informations sur les publications
-		'''
-		ordering = ['-date_created']
-		verbose_name="Article"
+    class Meta:
+        """méta-informations sur les publications"""
+
+        ordering = ["-date_created"]
+        verbose_name = "Article"
 
     def save(self, *args, **kwargs):
         """sauvegarder un article à partir d'un slug unique"""

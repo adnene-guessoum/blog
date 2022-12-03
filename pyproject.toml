@@ -25,14 +25,14 @@ black = "^22.10.0"
 mypy = "0.982"
 django-stubs = {extras = ["compatible-mypy"], version = "^1.13.0"}
 pylint-django = "^2.5.3"
+djangorestframework-stubs = {version = "1.2.0", extras = ["compatible-mypy"]}
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
-[tool.pylint]
-load-plugins = "pylint_django"
-django-settings-module="myblog.settings"
+# [tool.pylint]
+# load-plugins = "pylint_django"
 
 [tool.mypy]
 plugins = ["mypy_django_plugin.main"]
