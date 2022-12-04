@@ -12,7 +12,7 @@ tasks:
       - poetry run mypy myblog/ # --ignore-missing-imports
       - poetry run black myblog/
       - poetry run flake8 myblog/ --show-source --statistics --count
-      - export POETRY_PYTHONPATH=${PYTHONPATH}:${PWD}
+      - export PYTHONPATH=${PYTHONPATH}:${PWD}
       - poetry run pylint 
         --load-plugins pylint_django
         --django-settings-module=myblog.settings
