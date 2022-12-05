@@ -4,7 +4,6 @@
 # from django.shortcuts import render
 from django.contrib.auth import get_user_model
 from rest_framework import viewsets
-from .serializers import UserSerializer
 
 from rest_framework.response import Response
 from rest_framework import permissions
@@ -12,6 +11,7 @@ from rest_framework.views import APIView
 from rest_framework.generics import ListAPIView, RetrieveAPIView
 from backend.models import Blogpost
 from backend.serializers import BlogPostSerializer
+from .serializers import UserSerializer
 
 User = get_user_model()
 
@@ -59,7 +59,7 @@ class BlogPostCategoryView(APIView):
     serializer_class = BlogPostSerializer
     permission_classes = (permissions.AllowAny,)
 
-    def post(self, request, format=None):
+    def post(self, request):
         """post response on request"""
         data = self.request.data
         category = data("category")
