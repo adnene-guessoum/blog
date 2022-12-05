@@ -1,7 +1,7 @@
 """
     Modèles pour le blog
 """
-import datetime
+from django.utils import timezone
 from django.db import models
 from django.contrib.auth import get_user_model
 
@@ -63,7 +63,7 @@ class Blogpost(models.Model):
     excerpt = models.CharField(max_length=150)
     month = models.CharField(max_length=4)
     day = models.CharField(max_length=2)
-    date_created = models.DateField(default=datetime.date.today(), blank=True)
+    date_created = models.DateField(default=timezone.now().date(), blank=True)
     last_updated = models.DateTimeField(auto_now=True)
     featured = models.BooleanField(default=False)
     published = models.BooleanField(default=False, verbose_name="Publié")
