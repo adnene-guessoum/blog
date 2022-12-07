@@ -22,7 +22,7 @@ tasks:
   docker-build:
       desc: Builds docker image/containers/volumes and prompt django superuser
       cmds:
-        - docker compose up -d --build
+        - docker compose up --build -d
         - docker ps
 
   docker-up:
@@ -40,7 +40,7 @@ tasks:
   docker-start:
       desc: start containers
       cmds:
-        - docker compose start -d
+        - docker compose start
         - docker ps
 
   docker-stop:
