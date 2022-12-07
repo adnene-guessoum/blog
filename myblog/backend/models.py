@@ -63,7 +63,7 @@ class Blogpost(models.Model):
     excerpt = models.CharField(max_length=150)
     month = models.CharField(max_length=4)
     day = models.CharField(max_length=2)
-    date_created = models.DateField(default=timezone.now().date(), blank=True)
+    date_created = models.DateField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now=True)
     featured = models.BooleanField(default=False)
     published = models.BooleanField(default=False, verbose_name="Publié")
