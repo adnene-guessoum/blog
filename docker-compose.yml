@@ -13,7 +13,7 @@ services:
     image: "blog:dev"
     build:
       target: development_build
-      context: .
+      context: ./myblog
       cache_from:
         - "blog:dev"
       args:
