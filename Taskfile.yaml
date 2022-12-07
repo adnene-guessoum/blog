@@ -16,6 +16,7 @@ tasks:
       - poetry run pylint 
         --load-plugins pylint_django
         --django-settings-module=myblog.settings
+        --ignore-patterns=Dockerfile
         ./myblog/*
 
   docker-build:
