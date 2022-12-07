@@ -18,37 +18,33 @@ tasks:
         --django-settings-module=myblog.settings
         ./myblog/*
 
-        
-
-  test:
-    desc: Runs test on code
-    cmds: 
-      - >
-        poetry run pytest
-        --cov=gh_star_count
-        --cov-report=html
-
-  build:
-      desc: Builds the python package
+  docker-build:
+      desc: Builds docker image/containers/volumes and prompt django superuser
       cmds:
-        - poetry build
+        - docker compose up -d --build
+        - docker ps
 
-  docs-serve:
-    desc: Serve the documentation locally
-    deps:
-      - test
-      - generate-changelog
-    cmds:
-      - poetry run mkdocs serve
+  docker-up:
+      desc: start and build containers, etc... (existing volumes)
+      cmds:
+        - docker compose up -d
+        - docker ps
 
-  docs-publish:
-    desc: Publish the documentation to gh-pages
-    deps:
-      - generate-changelog
-    cmds:
-      - poetry run gh-deploy --force
+  docker-down:
+      desc: stop and remove containers, etc... (persist volumes)
+      cmds:
+        - docker compose down
+        - docker ps
 
-  generate-changelog:
-    desc: Generates the changelog
-    cmds:
-      - poetry run git-changelog --output CHANGELOG.md .
+  docker-start:
+      desc: start containers
+      cmds:
+        - docker compose start -d
+        - docker ps
+
+  docker-stop:
+      desc: stop containers
+      cmds:
+        - docker compose stop
+        - docker ps
+

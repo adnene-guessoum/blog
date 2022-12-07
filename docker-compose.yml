@@ -13,7 +13,8 @@ services:
     image: "blog:dev"
     build:
       target: development_build
-      context: ./myblog
+      context: .
+      dockerfile: ./myblog/Dockerfile
       cache_from:
         - "blog:dev"
       args:
