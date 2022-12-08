@@ -65,7 +65,7 @@ class Blogpost(models.Model):
     date_created = models.DateField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now=True)
     featured = models.BooleanField(default=False)
-    published = models.BooleanField(default=False, verbose_name="Publié")
+    published = models.BooleanField(default=False, verbose_name="Publier")
     content = models.TextField(verbose_name="Corps")
 
     def __str__(self):

@@ -44,7 +44,7 @@ class BlogPostDetailView(RetrieveAPIView):
     permission_classes = (permissions.AllowAny,)
 
 
-class BlogPostFeaturedView(RetrieveAPIView):
+class BlogPostFeaturedView(ListAPIView):
     """View of the featured publication"""
 
     queryset = Blogpost.objects.all().filter(featured=True)
@@ -62,10 +62,10 @@ class BlogPostCategoryView(APIView):
     def post(self, request):
         """post response on request"""
         data = self.request.data
-        category = data("category")
+        category = data["category"]
         queryset = Blogpost.objects.order_by("-date_created").filter(
             category__iexact=category
         )
-        serializer = BlogPostSerializer(queryset, any=True)
+        serializer = BlogPostSerializer(queryset, many=True)
 
         return Response(serializer.data)
