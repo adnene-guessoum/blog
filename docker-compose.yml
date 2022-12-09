@@ -27,5 +27,18 @@ services:
     depends_on:
       - db
 
+  front:
+    image: "front:dev"
+    build:
+      target: development_front
+      context: .
+      dockerfile: ./frontend/Dockerfile
+    command: npm -Wd start
+    ports:
+      - 3000:3000
+    volumes:
+      - ./frontend:/front
+      - /front/node_modules
+
 volumes:
   postgres_data:
