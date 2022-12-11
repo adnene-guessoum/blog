@@ -1,9 +1,10 @@
 import React from 'react';
 import { Link, NavLink } from 'react-router-dom';
 
-const blog = () => (
-	<div>Blog</div>
+const navbar = () => (
+	<nav>
+		Navbar
+	</nav>
 );
 
-export default blog;
-
+export default navbar;
