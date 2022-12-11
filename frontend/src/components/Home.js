@@ -10,7 +10,15 @@ const home = () => (
 
 			<hr className="my-4" />
 
-			<div className="description-project">
+						<div className="blog-section">
+				<p>lire les publications ?</p>
+				<p className="lead">
+					<Link className="btn btn-primary btn-lg" to='/blog' role="button">
+				Aller vers le Blog</Link>
+				</p>
+			</div>
+
+<div className="description-project">
 				<p>J&apos;ai construit ce blog avec Django, React et Bootstrap.
 					Vous pouvez trouver la description de
 					ce projet sur mon site web portfolio :
@@ -22,13 +30,6 @@ const home = () => (
 				</p>
 			</div>
 			
-			<div className="blog-section">
-				<p>lire les publications ?</p>
-				<p className="lead">
-					<Link className="btn btn-primary btn-lg" to='/blog' role="button">
-				Aller vers le Blog</Link>
-				</p>
-			</div>
 
 		</div>
 
