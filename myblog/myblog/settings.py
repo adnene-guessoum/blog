@@ -148,3 +148,6 @@ REST_FRAMEWORK = {
         "rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly"
     ]
 }
+
+# issue request from react CORS policy
+CORS_ORIGIN_ALLOW_ALL = True
