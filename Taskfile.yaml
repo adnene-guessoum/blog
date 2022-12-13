@@ -18,6 +18,8 @@ tasks:
         --django-settings-module=myblog.settings
         --ignore-patterns=Dockerfile
         ./myblog/*
+      - npm run --prefix ./frontend format
+      - npm run --prefix ./frontend lint
 
   docker-build:
       desc: Builds docker image/containers/volumes and prompt django superuser
