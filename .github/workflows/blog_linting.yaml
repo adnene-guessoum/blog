@@ -19,10 +19,12 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-            # Load our cached dependencies to speed things up.
-            # You will get more motivation for this extra stuff
-            # one you waited minutes.
+      - name: Set up Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16
 
+      # Load our cached dependencies to speed things up.
       - name: Load cached venv
         id: cached-poetry-dependencies
         uses: actions/cache@v2
@@ -40,9 +42,13 @@ jobs:
           python -m pip install --upgrade pip poetry
 
           # Install dependencies through task
-      - name: Install Dependencies
+      - name: Install Python Dependencies with poetry
         run: |
           ./bin/task install
+
+      - name: Install Node Dependencies
+        run: |
+          npm --prefix ./frontend ci
 
           # Run linting
       - name: Update Python path for pylint
