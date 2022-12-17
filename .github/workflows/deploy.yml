@@ -1,0 +1,35 @@
+name: Deployer le blog
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+steps:
+  - name: Build Docker images
+    run: |
+      docker-compose build
+      
+  - name: Push Docker images
+    uses: aws-actions/amazon-ecr-login@v1
+    with:
+      registry: ${{ secrets.AWS_REGISTRY_ID }}.dkr.ecr.eu-west-3.amazonaws.com/blog
+    run: |
+      docker-compose push
+
+  - name: Create build file
+    run: |
+      zip -r build.zip .
+
+  # Déployer sur Elastic Beanstalk
+  - name: Deployer
+    uses: aws-actions/upload-to-elastic-beanstalk@v2
+    with:
+      access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      secret-access-key: ${{ secrets.AWS_ACCESS_KEY }}
+      region: eu-west-3
+      application-name: my-blog
+      environment-name: my-blog-env
+      zip-file: ./build.zip
