@@ -1,0 +1,55 @@
+{
+  "AWSEBDockerrunVersion": 2,
+  "containerDefinitions": [
+    {
+      "name": "django",
+      "image": "blog:dev",
+      "essential": true,
+      "memory": 256,
+      "portMappings": [
+        {
+          "hostPort": 8000,
+          "containerPort": 8000
+        }
+      ],
+      "environment": [
+        {
+          "name": "DJANGO_SETTINGS_MODULE",
+          "value": "config.settings.production"
+        }
+      ]
+    },
+    {
+      "name": "next",
+      "image": "front:dev",
+      "essential": true,
+      "memory": 256,
+      "portMappings": [
+        {
+          "hostPort": 80,
+          "containerPort": 80
+        }
+      ]
+    },
+    {
+      "name": "postgres",
+      "image": "postgres:12.0-alpine",
+      "essential": true,
+      "memory": 256,
+      "environment": [
+        {
+          "name": "POSTGRES_DB",
+          "value": "mydatabase"
+        },
+        {
+          "name": "POSTGRES_USER",
+          "value": "myuser"
+        },
+        {
+          "name": "POSTGRES_PASSWORD",
+          "value": "mypassword"
+        }
+      ]
+    }
+  ]
+}

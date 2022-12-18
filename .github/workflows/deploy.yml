@@ -31,5 +31,5 @@ steps:
       secret-access-key: ${{ secrets.AWS_ACCESS_KEY }}
       region: eu-west-3
       application-name: my-blog
-      environment-name: my-blog-env
+      environment-name: blog
       zip-file: ./build.zip
