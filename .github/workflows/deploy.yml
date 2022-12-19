@@ -7,29 +7,33 @@ on:
     branches:
       - main
 
-steps:
-  - name: Build Docker images
-    run: |
-      docker-compose build
-      
-  - name: Push Docker images
-    uses: aws-actions/amazon-ecr-login@v1
-    with:
-      registry: ${{ secrets.AWS_REGISTRY_ID }}.dkr.ecr.eu-west-3.amazonaws.com/blog:latest
-    run: |
-      docker-compose push
+jobs:
+  build:
+    runs-on: ubuntu-latest
 
-  - name: Create build file
-    run: |
-      zip -r build.zip .
+    steps:
+      - name: Build Docker images
+        run: |
+          docker-compose build
 
-  # Déployer sur Elastic Beanstalk
-  - name: Deployer
-    uses: aws-actions/upload-to-elastic-beanstalk@v2
-    with:
-      access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      secret-access-key: ${{ secrets.AWS_ACCESS_KEY }}
-      region: eu-west-3
-      application-name: owling-blog
-      environment-name: Owlingblog-env
-      zip-file: ./build.zip
+      - name: Push Docker images
+        uses: aws-actions/amazon-ecr-login@v1
+        with:
+          registry: ${{ secrets.AWS_REGISTRY_ID }}.dkr.ecr.eu-west-3.amazonaws.com/blog:latest
+        run: |
+          docker-compose push
+
+      - name: Create build file
+        run: |
+          zip -r build.zip .
+
+          # Déployer sur Elastic Beanstalk
+      - name: Deployer
+        uses: aws-actions/upload-to-elastic-beanstalk@v2
+        with:
+          access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          secret-access-key: ${{ secrets.AWS_ACCESS_KEY }}
+          region: eu-west-3
+          application-name: owling-blog
+          environment-name: Owlingblog-env
+          zip-file: ./build.zip
