@@ -8,10 +8,12 @@ on:
       - main
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
+      - uses: actions/checkout@v2
+
       - name: Build Docker images
         run: |
           docker-compose build
@@ -29,13 +31,23 @@ jobs:
         run: |
           zip -r build.zip .
 
-          # Déployer sur Elastic Beanstalk
-      - name: Deployer
-        uses: aws-actions/upload-to-elastic-beanstalk@v2
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
         with:
-          access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          secret-access-key: ${{ secrets.AWS_ACCESS_KEY }}
-          region: eu-west-3
-          application-name: owling-blog
-          environment-name: Owlingblog-env
-          zip-file: ./build.zip
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-region: "eu-west-3"
+
+      - name: Upload package to S3
+        run: aws s3 cp build.zip s3://owling-blog-bucket/
+
+      - name: Create new EBS Application Version
+        run: |
+          aws elasticbeanstalk create-application-version \
+          --application-name owling-blog \
+          --source-bundle S3Bucket="owling-blog-bucket",S3Key="build.zip" \
+          --version-label "ver-${{ github.sha }}" \
+          --description "commit-sha-${{ github.sha }}"
+
+      - name: Update Application to latest version on EBS
+        run: aws elasticbeanstalk update-environment --environment-name Owlingblog-env --version-label "ver-${{ github.sha }}"
