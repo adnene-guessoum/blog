@@ -15,7 +15,7 @@ steps:
   - name: Push Docker images
     uses: aws-actions/amazon-ecr-login@v1
     with:
-      registry: ${{ secrets.AWS_REGISTRY_ID }}.dkr.ecr.eu-west-3.amazonaws.com/blog
+      registry: ${{ secrets.AWS_REGISTRY_ID }}.dkr.ecr.eu-west-3.amazonaws.com/blog:latest
     run: |
       docker-compose push
 
@@ -30,6 +30,6 @@ steps:
       access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
       secret-access-key: ${{ secrets.AWS_ACCESS_KEY }}
       region: eu-west-3
-      application-name: my-blog
-      environment-name: blog
+      application-name: owling-blog
+      environment-name: Owlingblog-env
       zip-file: ./build.zip
