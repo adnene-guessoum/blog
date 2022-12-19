@@ -16,10 +16,12 @@ jobs:
         run: |
           docker-compose build
 
-      - name: Push Docker images
+      - name: Use action
         uses: aws-actions/amazon-ecr-login@v1
         with:
           registry: ${{ secrets.AWS_REGISTRY_ID }}.dkr.ecr.eu-west-3.amazonaws.com/blog:latest
+
+      - name: Push Docker Images
         run: |
           docker-compose push
 
