@@ -29,19 +29,22 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
-      - name: Build Docker images
+      - name: Build, Tag and Push Docker Images
+        env:
+          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          REPOSITORY: blog
+          IMAGE_TAG: prod
         run: |
           docker-compose build
 
-      - name: Use action
-        uses: aws-actions/amazon-ecr-login@v1
-        with:
-          registries: ${{ secrets.AWS_REGISTRY_ID }}.dkr.ecr.eu-west-3.amazonaws.com/blog:latest
+          docker tag blog:latest 225275344647.dkr.ecr.eu-west-3.amazonaws.com/blog:latest
+          docker-compose push 225275344647.dkr.ecr.eu-west-3.amazonaws.com/blog:latest
 
-      - name: Build and Push Docker Images
-        run: |
-          docker-compose build
-          docker-compose push
+          docker tag front:latest 225275344647.dkr.ecr.eu-west-3.amazonaws.com/front:latest
+          docker-compose push 225275344647.dkr.ecr.eu-west-3.amazonaws.com/front:latest
+
+          docker tag postgres:12.0-alpine 225275344647.dkr.ecr.eu-west-3.amazonaws.com/db:latest
+          docker-compose push 225275344647.dkr.ecr.eu-west-3.amazonaws.com/db:latest
 
       - name: Create build file
         run: |

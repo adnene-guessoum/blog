@@ -10,13 +10,13 @@ services:
       - ./.env
 
   blog:
-    image: "blog:dev"
+    image: "blog:latest"
     build:
       target: development_build
       context: .
       dockerfile: ./myblog/Dockerfile
       cache_from:
-        - "blog:dev"
+        - "blog:latest"
       args:
         DJANGO_ENV: development
     command: python -Wd myblog/manage.py runserver 0.0.0.0:8000
@@ -28,7 +28,7 @@ services:
       - db
 
   front:
-    image: "front:dev"
+    image: "front:latest"
     build:
       target: development_front
       context: .
