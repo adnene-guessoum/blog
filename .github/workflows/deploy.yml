@@ -14,22 +14,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Build Docker images
+      - name: Create env file
         run: |
-          docker-compose build
-
-      - name: Use action
-        uses: aws-actions/amazon-ecr-login@v1
-        with:
-          registry: ${{ secrets.AWS_REGISTRY_ID }}.dkr.ecr.eu-west-3.amazonaws.com/blog:latest
-
-      - name: Push Docker Images
-        run: |
-          docker-compose push
-
-      - name: Create build file
-        run: |
-          zip -r build.zip .
+          echo "${{ secrets.ENV_FILE }}" > .env
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -37,6 +24,28 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_ACCESS_KEY }}
           aws-region: "eu-west-3"
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build Docker images
+        run: |
+          docker-compose build
+
+      - name: Use action
+        uses: aws-actions/amazon-ecr-login@v1
+        with:
+          registries: ${{ secrets.AWS_REGISTRY_ID }}.dkr.ecr.eu-west-3.amazonaws.com/blog:latest
+
+      - name: Build and Push Docker Images
+        run: |
+          docker-compose build
+          docker-compose push
+
+      - name: Create build file
+        run: |
+          zip -r build.zip .
 
       - name: Upload package to S3
         run: aws s3 cp build.zip s3://owling-blog-bucket/
