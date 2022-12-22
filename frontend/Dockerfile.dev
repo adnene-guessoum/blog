@@ -15,10 +15,10 @@ RUN npm install
 # Copy app files
 COPY --chown=node:node . .
 
+USER node
+
 # Expose port
 EXPOSE 3000
-
-USER node
 
 # Start the app
 CMD [ "npm", "start" ]

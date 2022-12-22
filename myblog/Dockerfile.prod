@@ -38,3 +38,5 @@ COPY pyproject.toml poetry.lock /code/
 RUN poetry install
 # copy project
 COPY . .
+
+EXPOSE 3000
