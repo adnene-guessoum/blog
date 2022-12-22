@@ -1,0 +1,40 @@
+version: "3.8"
+
+services:
+ 
+  database:
+    image:
+    restart: unless-stopped
+
+  backend:
+    image: "backend"
+    build:
+      target: production_build
+      context: ./myblog
+      dockerfile: ./myblog/Dockerfile.prod
+      cache_from:
+        - "backend"
+      args:
+        DJANGO_ENV: production
+        command: python -Wd myblog/manage.py runserver 0.0.0.0:8000
+        ports:
+          - 8000:8000
+        env_file:
+          - ./.env.prod
+        depends_on:
+          - db
+
+  frontend:
+    image: "frontend"
+    build:
+      target: production_front
+      context: .
+      dockerfile: ./frontend/Dockerfile.prod
+    command: npm -Wd start
+    ports:
+      - 3000:3000
+
+    nginx:
+      image:
+
+

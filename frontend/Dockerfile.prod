@@ -1,0 +1,29 @@
+FROM node:19-alpine AS production_front
+
+ENV NODE_ENV production
+
+# Add a work directory
+WORKDIR /front
+
+# [eslint] EACCES: permission denied, mkdir '/front/node_modules/.cache'
+RUN chown -R node:node /front
+
+# Cache and Install dependencies
+COPY --chown=node:node package.json package-lock.json /front/
+RUN npm install --production --silent
+
+# Copy app files
+COPY --chown=node:node . .
+RUN chown -R node:node /front/node_modules
+
+# Expose port
+EXPOSE 3000
+
+USER node
+
+# build the frontend
+RUN npm run build
+
+# nginx server: multistage build
+FROM nginx
+COPY --from=production_front frontend/build usr/share/nginx/html

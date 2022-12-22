@@ -1,0 +1,44 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres:12.0-alpine
+    restart: unless-stopped
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - ./.env
+
+  blog-dev:
+    image: "blog:dev"
+    build:
+      target: development_build
+      context: .
+      dockerfile: ./myblog/Dockerfile.dev
+      cache_from:
+        - "blog:dev"
+      args:
+        DJANGO_ENV: development
+    command: python -Wd myblog/manage.py runserver 0.0.0.0:8000
+    ports:
+      - 8000:8000
+    env_file:
+      - ./.env
+    depends_on:
+      - db
+
+  front-dev:
+    image: "front:dev"
+    build:
+      target: development_front
+      context: .
+      dockerfile: ./frontend/Dockerfile.dev
+    command: npm -Wd start
+    ports:
+      - 3000:3000
+    volumes:
+      - ./frontend:/front
+      - /front/node_modules
+
+volumes:
+  postgres_data:

@@ -21,33 +21,28 @@ tasks:
       - npm run --prefix ./frontend format
       - npm run --prefix ./frontend lint
 
-  docker-build:
-      desc: Builds docker image/containers/volumes and prompt django superuser
+  docker-dev-build:
+      desc: Builds docker image/containers/volumes for development
       cmds:
-        - docker compose up --build -d
+        - docker compose -f docker-compose-dev.yml up --build -d
         - docker ps
 
-  docker-up:
-      desc: start and build containers, etc... (existing volumes)
+  docker-dev-down:
+      desc: stop and remove containers for development
       cmds:
-        - docker compose up -d
+        - docker compose -f docker-compose-dev.yml down
         - docker ps
 
-  docker-down:
-      desc: stop and remove containers, etc... (persist volumes)
+  docker-prod-build:
+      desc: Builds docker image/containers/volumes in production
       cmds:
-        - docker compose down
+        - docker compose -f docker-compose-prod.yml up --build -d
         - docker ps
 
-  docker-start:
-      desc: start containers
+  docker-prod-down:
+      desc: stop and remove containers in production
       cmds:
-        - docker compose start
+        - docker compose -f docker-compose-prod.yml down
         - docker ps
 
-  docker-stop:
-      desc: stop containers
-      cmds:
-        - docker compose stop
-        - docker ps
 
