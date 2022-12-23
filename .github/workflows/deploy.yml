@@ -1,8 +1,5 @@
 name: Deployer le blog
 on:
-  push:
-    branches:
-      - main
   pull_request:
     branches:
       - main
@@ -29,19 +26,17 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
-      - name: Build Docker images
+      - name: Build, Tag and Push Docker Images to ECR for beanstalk
         run: |
-          docker-compose build
+          docker compose -f docker-compose-prod.yml build -d
 
-      - name: Use action
-        uses: aws-actions/amazon-ecr-login@v1
-        with:
-          registries: ${{ secrets.AWS_REGISTRY_ID }}.dkr.ecr.eu-west-3.amazonaws.com/blog:latest
+          docker tag blog-backend-container public.ecr.aws/y9i0i5l9/blog-backend-container
+          docker tag blog-frontend-container public.ecr.aws/y9i0i5l9/blog-frontend-container
+          docker tag blog-nginx-container public.ecr.aws/y9i0i5l9/blog-nginx-container
 
-      - name: Build and Push Docker Images
-        run: |
-          docker-compose build
-          docker-compose push
+          docker push public.ecr.aws/y9i0i5l9/blog-backend-container
+          docker push public.ecr.aws/y9i0i5l9/blog-frontend-container
+          docker push public.ecr.aws/y9i0i5l9/blog-nginx-container
 
       - name: Create build file
         run: |
