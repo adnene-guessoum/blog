@@ -3,7 +3,6 @@ version: "3.8"
 services:
   database:
     image: postgres:12.0-alpine
-    container_name: "psql_db"
     restart: unless-stopped
     env_file:
       - ./.env.prod
@@ -12,40 +11,44 @@ services:
     image: "blog-backend-container"
     build:
       target: production_build
-      context: ./myblog
+      context: .
       dockerfile: ./myblog/Dockerfile.prod
       cache_from:
         - "blog-backend-container"
       args:
         DJANGO_ENV: production
-        command: python -Wd myblog/manage.py runserver 0.0.0.0:3000
-        env_file:
-          - ./.env.prod
-        depends_on:
-          - database
+    command: python -Wd myblog/manage.py runserver 0.0.0.0:3000
+    env_file:
+      - ./.env.prod
+    depends_on:
+      - database
     ports:
-      - "3000:3000"
+      - 3000:3000
     container_name: "backend"
 
   frontend:
     image: "blog-frontend-container"
     build:
-      context: ./frontend
+      context: .
       dockerfile: ./frontend/Dockerfile.prod
       cache_from:
         - "blog-frontend-container"
     command: npm -Wd start
     env_file:
       - ./.env.prod
+    ports:
+      - 3001:3001
     container_name: "frontend"
+    volumes:
+      - /front/node_modules
 
   nginx:
     image: "blog-nginx-container"
     build:
-      context: ./nginx
+      context: .
       dockerfile: ./nginx/Dockerfile.prod 
     ports:
-      - "80:80"
+      - 80:80
     container_name: "web-server"
 
 
