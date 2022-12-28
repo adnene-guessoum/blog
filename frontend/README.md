@@ -4,7 +4,7 @@
 
 - API requests (get/post async/await using axios) to django rest framework
 - simple Bootstrap layout and basic react component
-- Docker bind mount
+- Docker bind mount for dev env
 - Eslint/prettier integration to github actions
 
 ## TODO:
