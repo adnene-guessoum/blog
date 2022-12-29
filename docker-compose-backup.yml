@@ -7,14 +7,13 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     env_file:
-      - ./.env
+      - ./api/.env.dev
 
   blog-dev:
     image: "blog:dev"
     build:
       target: development_build
-      context: .
-      dockerfile: ./myblog/Dockerfile.dev
+      context: ./api
       cache_from:
         - "blog:dev"
       args:
@@ -23,7 +22,7 @@ services:
     ports:
       - 8000:8000
     env_file:
-      - ./.env
+      - ./api/.env.dev
     depends_on:
       - db
 
@@ -31,8 +30,7 @@ services:
     image: "front:dev"
     build:
       target: development_front
-      context: .
-      dockerfile: ./frontend/Dockerfile.dev
+      context: ./frontend
     command: npm -Wd start
     ports:
       - 3000:3000

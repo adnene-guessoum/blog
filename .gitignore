@@ -1,3 +1,6 @@
+#divers
+.garbage/
+
 # create-react-app
 .idea/
 node_modules/

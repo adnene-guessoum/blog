@@ -19,28 +19,3 @@ tasks:
         --ignore-patterns=Dockerfile
         ./myblog/*
 
-  docker-dev-build:
-      desc: Builds docker image/containers/volumes for development
-      cmds:
-        - docker compose -f docker-compose-dev.yml up --build -d
-        - docker ps
-
-  docker-dev-down:
-      desc: stop and remove containers for development
-      cmds:
-        - docker compose -f docker-compose-dev.yml down
-        - docker ps
-
-  docker-prod-build:
-      desc: Builds docker image/containers/volumes in production
-      cmds:
-        - docker compose -f docker-compose-prod.yml up --build
-        - docker ps
-
-  docker-prod-down:
-      desc: stop and remove containers in production
-      cmds:
-        - docker compose -f docker-compose-prod.yml down
-        - docker ps
-
-

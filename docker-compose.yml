@@ -1,45 +1,38 @@
 version: "3.8"
 
 services:
-  database:
+  db:
     image: postgres:12.0-alpine
     restart: unless-stopped
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     env_file:
-      - ./.env.prod
+      - ./api/.env.dev
 
-  backend:
-    image: "blog-backend-container"
+  blog-prod:
+    image: "production-container-blog"
     build:
-      target: production_build
-      context: .
-      dockerfile: ./myblog/Dockerfile.prod
+      context: ./api
       cache_from:
-        - "blog-backend-container"
-      args:
-        DJANGO_ENV: production
+        - "production-container-blog"
     command: gunicorn myblog.myblog.wsgi:application --bind 0.0.0.0:8000
-    env_file:
-      - ./.env.prod
-    depends_on:
-      - database
     ports:
       - 8000:8000
-    container_name: "backend"
+    env_file:
+      - ./api/.env.dev
+    depends_on:
+      - db
 
-  frontend:
-    image: "blog-frontend-container"
+  front-prod:
+    image: "production-container-blog"
     build:
       context: ./frontend
-      dockerfile: ./Dockerfile.prod
       cache_from:
-        - "blog-frontend-container"
-    env_file:
-      - ./.env.prod
-    container_name: "frontend"
+        - "production-container-blog"
+    ports:
+      - 3000:3000
     volumes:
-      - front_build:/front/build
+      - front_build:/frontend/build
 
   nginx:
     image: nginx:latest
@@ -50,8 +43,8 @@ services:
       - front_build:/var/www/front
     container_name: "web-server"
     depends_on:
-      - backend
-      - frontend
+      - blog-prod
+      - front-prod
 
 volumes:
   front_build:
