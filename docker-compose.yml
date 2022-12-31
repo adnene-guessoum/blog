@@ -10,7 +10,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     env_file:
-      - ./api/.env.dev
+      - ./api/.env
 
   api:
     image: "production-backend-container"
@@ -23,7 +23,7 @@ services:
     ports:
       - 8000:8000
     env_file:
-      - ./api/.env.dev
+      - ./api/.env
     volumes:
       - ./api/:/usr/src/blog/
     depends_on:
