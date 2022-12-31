@@ -1,8 +1,5 @@
 name: Deployer le blog
 on:
-  push:
-    branches:
-      - main
   pull_request:
     branches:
       - main
@@ -29,35 +26,30 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
-      - name: Build, Tag and Push Docker Images
-        env:
-          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          REPOSITORY: blog
-          IMAGE_TAG: prod
+      - name: Build, Tag and Push Docker Images to ECR for beanstalk
         run: |
-          docker-compose build
+          docker compose build -d
 
-          docker tag blog:latest 225275344647.dkr.ecr.eu-west-3.amazonaws.com/blog:latest
-          docker-compose push 225275344647.dkr.ecr.eu-west-3.amazonaws.com/blog:latest
+          docker tag production-backend-container public.ecr.aws/y9i0i5l9/blog-backend-container
+          docker tag production-frontend-container public.ecr.aws/y9i0i5l9/blog-frontend-container
+          docker tag web-server public.ecr.aws/y9i0i5l9/blog-nginx-container
 
-          docker tag front:latest 225275344647.dkr.ecr.eu-west-3.amazonaws.com/front:latest
-          docker-compose push 225275344647.dkr.ecr.eu-west-3.amazonaws.com/front:latest
-
-          docker tag postgres:12.0-alpine 225275344647.dkr.ecr.eu-west-3.amazonaws.com/db:latest
-          docker-compose push 225275344647.dkr.ecr.eu-west-3.amazonaws.com/db:latest
+          docker push public.ecr.aws/y9i0i5l9/blog-backend-container
+          docker push public.ecr.aws/y9i0i5l9/blog-frontend-container
+          docker push public.ecr.aws/y9i0i5l9/blog-nginx-container
 
       - name: Create build file
         run: |
-          zip -r build.zip .
+          zip -r blog_build.zip .
 
       - name: Upload package to S3
-        run: aws s3 cp build.zip s3://owling-blog-bucket/
+        run: aws s3 cp blog_build.zip s3://owling-blog-bucket/
 
       - name: Create new EBS Application Version
         run: |
           aws elasticbeanstalk create-application-version \
           --application-name owling-blog \
-          --source-bundle S3Bucket="owling-blog-bucket",S3Key="build.zip" \
+          --source-bundle S3Bucket="owling-blog-bucket", S3Key="blog_build.zip" \
           --version-label "ver-${{ github.sha }}" \
           --description "commit-sha-${{ github.sha }}"
 
