@@ -1,11 +1,4 @@
-# (Basic Structure memo)
-# #Comment
-# INSTRUCTION arguments
-#------------------------------------------------------------------------------
-
-
-# Setting a base image from official dockerhub library for our python version
-FROM python:3.10-slim-buster AS development_build
+FROM python:3.10-slim-buster
 
 ARG DJANGO_ENV
 
@@ -38,10 +31,10 @@ RUN apt-get update \
   && pip install "poetry==$POETRY_VERSION" && poetry --version
 
 # set work directory
-WORKDIR /code
-COPY pyproject.toml poetry.lock /code/
+WORKDIR /usr/src/blog
+COPY pyproject.toml poetry.lock ./
 
 # Install dependencies:
 RUN poetry install
 # copy project
-COPY . .
+COPY . ./

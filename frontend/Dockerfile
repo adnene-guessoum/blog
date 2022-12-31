@@ -3,18 +3,17 @@ FROM node:19-alpine AS development_front
 ENV NODE_ENV development
 
 # Add a work directory
-WORKDIR /front
+WORKDIR /usr/src/frontend
 
 # Cache and Install dependencies
-COPY package.json package-lock.json /front/
+COPY package.json package-lock.json .
 
 RUN npm install
 
 # Copy app files
 COPY . ./
 
-# Expose port
-EXPOSE 3000
+RUN npm run build
 
 # Start the app
-CMD [ "npm","run", "build" ]
+CMD [ "npm","start"]
