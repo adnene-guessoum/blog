@@ -28,11 +28,11 @@ jobs:
 
       - name: Build, Tag and Push Docker Images to ECR for beanstalk
         run: |
-          docker compose -f docker-compose-prod.yml build -d
+          docker compose build -d
 
-          docker tag blog-backend-container public.ecr.aws/y9i0i5l9/blog-backend-container
-          docker tag blog-frontend-container public.ecr.aws/y9i0i5l9/blog-frontend-container
-          docker tag blog-nginx-container public.ecr.aws/y9i0i5l9/blog-nginx-container
+          docker tag production-backend-container public.ecr.aws/y9i0i5l9/blog-backend-container
+          docker tag production-frontend-container public.ecr.aws/y9i0i5l9/blog-frontend-container
+          docker tag web-server public.ecr.aws/y9i0i5l9/blog-nginx-container
 
           docker push public.ecr.aws/y9i0i5l9/blog-backend-container
           docker push public.ecr.aws/y9i0i5l9/blog-frontend-container
@@ -40,16 +40,16 @@ jobs:
 
       - name: Create build file
         run: |
-          zip -r build.zip .
+          zip -r blog_build.zip .
 
       - name: Upload package to S3
-        run: aws s3 cp build.zip s3://owling-blog-bucket/
+        run: aws s3 cp blog_build.zip s3://owling-blog-bucket/
 
       - name: Create new EBS Application Version
         run: |
           aws elasticbeanstalk create-application-version \
           --application-name owling-blog \
-          --source-bundle S3Bucket="owling-blog-bucket",S3Key="build.zip" \
+          --source-bundle S3Bucket="owling-blog-bucket", S3Key="blog_build.zip" \
           --version-label "ver-${{ github.sha }}" \
           --description "commit-sha-${{ github.sha }}"
 

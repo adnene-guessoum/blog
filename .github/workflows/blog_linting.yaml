@@ -44,10 +44,12 @@ jobs:
           # Install dependencies through task
       - name: Install Python Dependencies with poetry
         run: |
+          cd api/
           ./bin/task install
 
       - name: Install Node Dependencies
         run: |
+          cd ../
           npm --prefix ./frontend ci
 
           # Run linting
@@ -64,4 +66,8 @@ jobs:
           SQL_PORT: ${{ secrets.SQL_PORT }}
           SQL_USER: ${{ secrets.SQL_USER }}
         run: |
+          cd api/
           ./bin/task lint
+          cd ../frontend
+          npm run format
+          npm run lint
