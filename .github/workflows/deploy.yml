@@ -28,7 +28,7 @@ jobs:
 
       - name: Build, Tag and Push Docker Images to ECR for beanstalk
         run: |
-          docker compose build -d
+          docker compose build
 
           docker tag production-backend-container public.ecr.aws/y9i0i5l9/blog-backend-container
           docker tag production-frontend-container public.ecr.aws/y9i0i5l9/blog-frontend-container
