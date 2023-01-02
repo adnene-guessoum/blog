@@ -29,6 +29,10 @@ jobs:
       - name: build images
         run: |
           docker compose build
+          
+      - name: get access token public repo
+        run: |
+          aws ecr-public get-login-password --region eu-west-3 | docker login --username AWS --password-stdin public.ecr.aws/y9i0i5l9
 
       - name: Tag and push backend image
         env:
