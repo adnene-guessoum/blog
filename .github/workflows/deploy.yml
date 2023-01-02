@@ -27,8 +27,10 @@ jobs:
           aws-region: "eu-west-3"
 
       - name: Login to Amazon ECR
-        id: login-ecr
+        id: login-ecr-public
         uses: aws-actions/amazon-ecr-login@v1
+        with:
+          registry-type: public
 
       - name: Build, Tag and Push Docker Images to ECR for beanstalk
         run: |
