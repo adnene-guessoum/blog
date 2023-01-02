@@ -32,6 +32,9 @@ jobs:
 
       - name: Build, Tag and Push Docker Images to ECR for beanstalk
         run: |
+
+          aws ecr-public get-login-password --region us-west-3 | docker login --username AWS --password-stdin public.ecr.aws/y9i0i5l9
+
           docker compose build
 
           docker tag production-backend-container public.ecr.aws/y9i0i5l9/blog-backend-container
