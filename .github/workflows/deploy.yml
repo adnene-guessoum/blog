@@ -37,7 +37,7 @@ jobs:
       - name: Tag and push backend image
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: blog-backend-container
+          ECR_REPOSITORY: y9i0i5l9/blog-backend-container
         run: |
           docker tag production-backend-container public.ecr.aws/y9i0i5l9/blog-backend-container
           docker push public.ecr.aws/y9i0i5l9/blog-backend-container
@@ -45,7 +45,7 @@ jobs:
       - name: Tag and push backend image
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: blog-frontend-container
+          ECR_REPOSITORY: y9i0i5l9/blog-frontend-container
         run: |
           docker tag production-frontend-container public.ecr.aws/y9i0i5l9/blog-frontend-container
           docker push public.ecr.aws/y9i0i5l9/blog-frontend-container
@@ -53,7 +53,7 @@ jobs:
       - name: Build, Tag and Push Docker Images to ECR for beanstalk
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: blog-nginx-container
+          ECR_REPOSITORY: y9i0i5l9/blog-nginx-container
         run: |
           docker tag web-server public.ecr.aws/y9i0i5l9/blog-nginx-container
           docker push public.ecr.aws/y9i0i5l9/blog-nginx-container
