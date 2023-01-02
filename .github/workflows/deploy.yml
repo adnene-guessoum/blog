@@ -32,7 +32,7 @@ jobs:
 
       - name: Tag and push backend image
         env:
-          REGISTRY: ${{ steps.login-ecr-public.outputs.registry }}
+          REGISTRY: public.ecr.aws
           REGISTRY_ALIAS: y9i0i5l9
           REPOSITORY: blog-backend-container
           IMAGE_TAG: ${{ github.sha }}
@@ -42,7 +42,7 @@ jobs:
 
       - name: Tag and push frontend image
         env:
-          REGISTRY: ${{ steps.login-ecr-public.outputs.registry }}
+          REGISTRY: public.ecr.aws
           REGISTRY_ALIAS: y9i0i5l9
           REPOSITORY: blog-frontend-container
           IMAGE_TAG: ${{ github.sha }}
@@ -52,7 +52,7 @@ jobs:
      
       - name: Tag and Push nginx image
         env:
-          REGISTRY: ${{ steps.login-ecr-public.outputs.registry }}
+          REGISTRY: public.ecr.aws
           REGISTRY_ALIAS: y9i0i5l9
           REPOSITORY: blog-nginx-container
           IMAGE_TAG: ${{ github.sha }}
