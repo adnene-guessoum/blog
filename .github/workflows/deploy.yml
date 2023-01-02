@@ -30,19 +30,32 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
-      - name: Build, Tag and Push Docker Images to ECR for beanstalk
+      - name: build images
         run: |
-
-          aws ecr-public get-login-password --region us-west-3 | docker login --username AWS --password-stdin public.ecr.aws/y9i0i5l9
-
           docker compose build
 
+      - name: Tag and push backend image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: blog-backend-container
+        run: |
           docker tag production-backend-container public.ecr.aws/y9i0i5l9/blog-backend-container
-          docker tag production-frontend-container public.ecr.aws/y9i0i5l9/blog-frontend-container
-          docker tag web-server public.ecr.aws/y9i0i5l9/blog-nginx-container
-
           docker push public.ecr.aws/y9i0i5l9/blog-backend-container
+
+      - name: Tag and push backend image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: blog-frontend-container
+        run: |
+          docker tag production-frontend-container public.ecr.aws/y9i0i5l9/blog-frontend-container
           docker push public.ecr.aws/y9i0i5l9/blog-frontend-container
+     
+      - name: Build, Tag and Push Docker Images to ECR for beanstalk
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: blog-nginx-container
+        run: |
+          docker tag web-server public.ecr.aws/y9i0i5l9/blog-nginx-container
           docker push public.ecr.aws/y9i0i5l9/blog-nginx-container
 
       - name: Create build file
