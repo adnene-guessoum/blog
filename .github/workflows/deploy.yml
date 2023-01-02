@@ -77,7 +77,7 @@ jobs:
         run: |
           aws elasticbeanstalk create-application-version \
           --application-name owling-blog \
-          --source-bundle S3Bucket="owling-blog-bucket", S3Key="blog_build.zip" \
+          --source-bundle S3Bucket="owling-blog-bucket",S3Key="blog_build.zip" \
           --version-label "ver-${{ github.sha }}" \
           --description "commit-sha-${{ github.sha }}"
 
