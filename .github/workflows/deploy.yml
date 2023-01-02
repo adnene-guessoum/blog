@@ -26,17 +26,19 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_ACCESS_KEY }}
           aws-region: eu-west-3
 
+      - name: Login to Amazon ECR Public
+        id: login-ecr-public
+        uses: aws-actions/amazon-ecr-login@v1
+        with:
+          registry-type: public
+
       - name: build images
         run: |
           docker compose build
           
-      - name: get access token public repo
-        run: |
-          aws ecr-public get-login-password --region eu-west-3 | docker login --username AWS --password-stdin public.ecr.aws/y9i0i5l9
-
       - name: Tag and push backend image
         env:
-          REGISTRY: public.ecr.aws
+          REGISTRY: ${{ steps.login-ecr-public.outputs.registry }}
           REGISTRY_ALIAS: y9i0i5l9
           REPOSITORY: blog-backend-container
           IMAGE_TAG: ${{ github.sha }}
@@ -46,7 +48,7 @@ jobs:
 
       - name: Tag and push frontend image
         env:
-          REGISTRY: public.ecr.aws
+          REGISTRY: ${{ steps.login-ecr-public.outputs.registry }}
           REGISTRY_ALIAS: y9i0i5l9
           REPOSITORY: blog-frontend-container
           IMAGE_TAG: ${{ github.sha }}
@@ -56,7 +58,7 @@ jobs:
      
       - name: Tag and Push nginx image
         env:
-          REGISTRY: public.ecr.aws
+          REGISTRY: ${{ steps.login-ecr-public.outputs.registry }}
           REGISTRY_ALIAS: y9i0i5l9
           REPOSITORY: blog-nginx-container
           IMAGE_TAG: ${{ github.sha }}
