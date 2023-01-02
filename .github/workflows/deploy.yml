@@ -27,7 +27,7 @@ jobs:
           aws-region: eu-west-3
 
       - name: Login to Amazon ECR
-        id: login-ecr-public
+        id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
         with:
           registry-type: public
