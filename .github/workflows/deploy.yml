@@ -26,9 +26,11 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_ACCESS_KEY }}
           aws-region: eu-west-3
 
-      - name: Login to Amazon ECR
-        id: login-ecr
+      - name: Login to Amazon ECR Public
+        id: login-ecr-public
         uses: aws-actions/amazon-ecr-login@v1
+        with:
+          registry-type: public
 
       - name: build images
         run: |
@@ -36,27 +38,33 @@ jobs:
 
       - name: Tag and push backend image
         env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: y9i0i5l9/blog-backend-container
+          REGISTRY: ${{ steps.login-ecr-public.outputs.registry }}
+          REGISTRY_ALIAS: y9i0i5l9
+          REPOSITORY: blog-backend-container
+          IMAGE_TAG: ${{ github.sha }}
         run: |
-          docker tag production-backend-container public.ecr.aws/y9i0i5l9/blog-backend-container
-          docker push public.ecr.aws/y9i0i5l9/blog-backend-container
+          docker tag production-backend-container $REGISTRY/$REGISTRY_ALIAS/$REPOSITORY:$IMAGE_TAG
+          docker push $REGISTRY/$REGISTRY_ALIAS/$REPOSITORY:$IMAGE_TAG
 
-      - name: Tag and push backend image
+      - name: Tag and push frontend image
         env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: y9i0i5l9/blog-frontend-container
+          REGISTRY: ${{ steps.login-ecr-public.outputs.registry }}
+          REGISTRY_ALIAS: y9i0i5l9
+          REPOSITORY: blog-frontend-container
+          IMAGE_TAG: ${{ github.sha }}
         run: |
-          docker tag production-frontend-container public.ecr.aws/y9i0i5l9/blog-frontend-container
-          docker push public.ecr.aws/y9i0i5l9/blog-frontend-container
+          docker tag production-frontend-container $REGISTRY/$REGISTRY_ALIAS/$REPOSITORY:$IMAGE_TAG
+          docker push $REGISTRY/$REGISTRY_ALIAS/$REPOSITORY:$IMAGE_TAG
      
-      - name: Build, Tag and Push Docker Images to ECR for beanstalk
+      - name: Tag and Push nginx image
         env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: y9i0i5l9/blog-nginx-container
+          REGISTRY: ${{ steps.login-ecr-public.outputs.registry }}
+          REGISTRY_ALIAS: y9i0i5l9
+          REPOSITORY: blog-nginx-container
+          IMAGE_TAG: ${{ github.sha }}
         run: |
-          docker tag web-server public.ecr.aws/y9i0i5l9/blog-nginx-container
-          docker push public.ecr.aws/y9i0i5l9/blog-nginx-container
+          docker tag web-server $REGISTRY/$REGISTRY_ALIAS/$REPOSITORY:$IMAGE_TAG
+          docker push $REGISTRY/$REGISTRY_ALIAS/$REPOSITORY:$IMAGE_TAG
 
       - name: Create build file
         run: |
