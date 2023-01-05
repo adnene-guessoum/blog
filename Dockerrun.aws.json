@@ -19,14 +19,14 @@
 			"name": "backend",
 			"image": "public.ecr.aws/y9i0i5l9/blog-backend-container",
 			"hostname": "backend",
-			"essential": false,
+			"essential": true,
 			"memory": 300
 		},
 		{
 			"name": "frontend",
 			"image": "public.ecr.aws/y9i0i5l9/blog-frontend-container",
 			"hostname": "frontend",
-			"essential": false,
+			"essential": true,
 			"memory": 300
 		}
 	]
