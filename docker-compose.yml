@@ -14,7 +14,8 @@ services:
     env_file:
       - ./api/.env
     volumes:
-      - ./api/:/usr/src/blog/
+      - django_static:/usr/src/blog/myblog/static
+      - django_media:/usr/src/blog/myblog/media
 
   frontend:
     image: "production-frontend-container"
@@ -29,6 +30,7 @@ services:
       - ./frontend/.env
     volumes:
       - ./frontend/:/usr/src/frontend/
+      - front_build:/usr/src/frontend/build/
 
   nginx:
     image: "web-server"
@@ -36,6 +38,14 @@ services:
     build: ./nginx
     ports:
       - 80:8080
+    volumes:
+      - django_static:/usr/src/back/static
+      - django_media:/usr/src/back/media
+      - front_build:/usr/share/nginx/html
     depends_on:
       - api
-      - frontend
+
+volumes:
+  django_static:
+  django_media:
+  front_build:
