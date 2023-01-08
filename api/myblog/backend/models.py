@@ -111,6 +111,7 @@ class Blogpost(models.Model):
 
         # Here: super(Blogpost, self).save() calls save method of next class after
         # Blogpost in self's MRO ( maybe ?)
+
         # equivalent to: models.Model.save(self, ...) except what if we add a class
         # in between model and blogposts ? here, no need to change with
         # automatic MRO search/lookup.
