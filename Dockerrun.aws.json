@@ -1,5 +1,5 @@
 {
-	"AWSEBDockerrunVersion": 2,
+	"AWSEBDockerrunVersion": 3,
 	"containerDefinitions": [
 		{
 			"name":"nginx",
@@ -13,21 +13,21 @@
 				}
 			],
 			"links": ["frontend", "backend"],
-			"memory": 100
+			"memory": 256
 		},
 		{
 			"name": "backend",
 			"image": "public.ecr.aws/y9i0i5l9/blog-backend-container",
 			"hostname": "backend",
 			"essential": true,
-			"memory": 300
+			"memory": 512
 		},
 		{
 			"name": "frontend",
 			"image": "public.ecr.aws/y9i0i5l9/blog-frontend-container",
 			"hostname": "frontend",
-			"essential": true,
-			"memory": 300
+			"essential": false,
+			"memory": 512
 		}
 	]
 }
