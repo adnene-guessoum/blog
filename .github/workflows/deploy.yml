@@ -73,11 +73,18 @@ jobs:
       - name: Upload package to S3
         run: aws s3 cp blog_build.zip s3://owling-blog-bucket/
 
+      - name: reset AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-region: eu-west-3
+
       - name: Create new EBS Application Version
         run: |
           aws elasticbeanstalk create-application-version \
           --application-name owling-blog \
-          --source-bundle S3Bucket=owling-blog-bucket,S3Key=blog_build.zip \
+          --source-bundle S3Bucket="owling-blog-bucket",S3Key="blog_build.zip" \
           --version-label "ver-${{ github.sha }}" \
           --description "commit-sha-${{ github.sha }}"
 
