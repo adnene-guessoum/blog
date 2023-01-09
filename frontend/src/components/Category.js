@@ -6,7 +6,6 @@ const Category = () => {
   const [blogs, setBlogs] = useState([]);
   const [currentCat, setCurrentCat] = useState('');
   const { id } = useParams();
-  const REACT_APP_API_URL = 'http://owlingblog-env.eba-iv2cgmyy.eu-west-3.elasticbeanstalk.com';
 
   useEffect(() => {
     const category = id;
@@ -21,7 +20,7 @@ const Category = () => {
     const fetchData = async () => {
       try {
         const res = await axios.post(
-          `${REACT_APP_API_URL}/api/blog/category`,
+          `${process.env.REACT_APP_API_URL}/api/blog/category`,
           { category },
           config
         );
