@@ -1,0 +1,92 @@
+name: Deployer le blog
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Create env file
+        run: |
+          echo "${{ secrets.ENV_FILE }}" > api/.env
+          echo "${{ secrets.ENV_FILE_FRONT }}" > frontend/.env
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Login to Amazon ECR Public
+        id: login-ecr-public
+        uses: aws-actions/amazon-ecr-login@v1
+        with:
+          registry-type: public
+
+      - name: build images
+        run: |
+          docker compose build
+          
+      - name: Tag and push backend image
+        env:
+          REGISTRY: ${{ steps.login-ecr-public.outputs.registry }}
+          REGISTRY_ALIAS: y9i0i5l9
+          REPOSITORY: blog-backend-container
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker tag production-backend-container $REGISTRY/$REGISTRY_ALIAS/$REPOSITORY:$IMAGE_TAG
+          docker push $REGISTRY/$REGISTRY_ALIAS/$REPOSITORY:$IMAGE_TAG
+
+      - name: Tag and push frontend image
+        env:
+          REGISTRY: ${{ steps.login-ecr-public.outputs.registry }}
+          REGISTRY_ALIAS: y9i0i5l9
+          REPOSITORY: blog-frontend-container
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker tag production-frontend-container $REGISTRY/$REGISTRY_ALIAS/$REPOSITORY:$IMAGE_TAG
+          docker push $REGISTRY/$REGISTRY_ALIAS/$REPOSITORY:$IMAGE_TAG
+     
+      - name: Tag and Push nginx image
+        env:
+          REGISTRY: ${{ steps.login-ecr-public.outputs.registry }}
+          REGISTRY_ALIAS: y9i0i5l9
+          REPOSITORY: blog-nginx-container
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker tag web-server $REGISTRY/$REGISTRY_ALIAS/$REPOSITORY:$IMAGE_TAG
+          docker push $REGISTRY/$REGISTRY_ALIAS/$REPOSITORY:$IMAGE_TAG
+
+      - name: Create build file
+        run: |
+          zip -r blog_build.zip .
+
+      - name: Upload package to S3
+        run: aws s3 cp blog_build.zip s3://owling-blog-bucket/
+
+      - name: reset AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-region: eu-west-3
+
+      - name: Create new EBS Application Version
+        run: |
+          aws elasticbeanstalk create-application-version \
+          --application-name owling-blog \
+          --source-bundle S3Bucket="owling-blog-bucket",S3Key="blog_build.zip" \
+          --version-label "ver-${{ github.sha }}" \
+          --description "commit-sha-${{ github.sha }}"
+
+      - name: Update Application to latest version on EBS
+        run: aws elasticbeanstalk update-environment --environment-name Owlingblog-env --version-label "ver-${{ github.sha }}"

@@ -1,3 +1,7 @@
+#divers
+example/
+.garbage/
+
 # create-react-app
 .idea/
 node_modules/
@@ -113,6 +117,7 @@ GitHub.sublime-settings
 
 # Environments
 .env
+.env.*
 .venv
 env/
 venv/
