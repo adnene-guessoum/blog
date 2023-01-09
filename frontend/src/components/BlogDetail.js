@@ -5,11 +5,12 @@ import axios from 'axios';
 const BlogDetail = () => {
   const [blog, setBlog] = useState({});
   const { id } = useParams();
+	const REACT_APP_API_URL = "http://owlingblog-env.eba-iv2cgmyy.eu-west-3.elasticbeanstalk.com"
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/blog/${id}`);
+        const res = await axios.get(`${REACT_APP_API_URL}/api/blog/${id}`);
         setBlog(res.data);
       } catch (err) {
         console.log(err);
