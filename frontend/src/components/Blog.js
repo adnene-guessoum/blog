@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 const Blog = () => {
   const [blogs, setBlogs] = useState([]);
   const [featuredBlog, setFeaturedBlog] = useState([]);
-	const REACT_APP_API_URL = "http://owlingblog-env.eba-iv2cgmyy.eu-west-3.elasticbeanstalk.com"
+  const REACT_APP_API_URL = 'http://owlingblog-env.eba-iv2cgmyy.eu-west-3.elasticbeanstalk.com';
   // API request avec async-await
 
   useEffect(() => {

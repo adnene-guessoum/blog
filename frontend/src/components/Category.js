@@ -6,7 +6,7 @@ const Category = () => {
   const [blogs, setBlogs] = useState([]);
   const [currentCat, setCurrentCat] = useState('');
   const { id } = useParams();
-	const REACT_APP_API_URL = "http://owlingblog-env.eba-iv2cgmyy.eu-west-3.elasticbeanstalk.com"
+  const REACT_APP_API_URL = 'http://owlingblog-env.eba-iv2cgmyy.eu-west-3.elasticbeanstalk.com';
 
   useEffect(() => {
     const category = id;
