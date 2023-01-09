@@ -38,3 +38,5 @@ COPY pyproject.toml poetry.lock ./
 RUN poetry install
 # copy project
 COPY . ./
+
+RUN python myblog/manage.py collectstatic --no-input 

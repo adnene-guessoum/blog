@@ -6,7 +6,7 @@ ENV NODE_ENV development
 WORKDIR /usr/src/frontend
 
 # Cache and Install dependencies
-COPY package.json package-lock.json .
+COPY package.json package-lock.json ./
 
 RUN npm install
 
@@ -14,6 +14,3 @@ RUN npm install
 COPY . ./
 
 RUN npm run build
-
-# Start the app
-CMD [ "npm","start"]

@@ -5,13 +5,13 @@ import { Link } from 'react-router-dom';
 const Blog = () => {
   const [blogs, setBlogs] = useState([]);
   const [featuredBlog, setFeaturedBlog] = useState([]);
-
+  const REACT_APP_API_URL = 'http://owlingblog-env.eba-iv2cgmyy.eu-west-3.elasticbeanstalk.com';
   // API request avec async-await
 
   useEffect(() => {
     const fetchFeatured = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/blog/featured`);
+        const response = await axios.get(`${REACT_APP_API_URL}/api/blog/featured`);
         setFeaturedBlog(response.data[0]);
       } catch (err) {
         console.error(err);
@@ -24,7 +24,7 @@ const Blog = () => {
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
-        const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/blog/`);
+        const res = await axios.get(`${REACT_APP_API_URL}/api/blog/`);
         setBlogs(res.data);
       } catch (err) {
         console.error(err);

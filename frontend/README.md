@@ -8,7 +8,7 @@
 - Eslint/prettier integration to github actions
 
 ## TODO:
+
 - Styling layouts Home/Blog (maybe chakra-ui, emotion...)
-- integrate ui for other user roles:
-		- leave comment, share on twitter, upvote/downvote
-- CD with docker/AWS   
+- integrate ui for other user roles: - leave comment, share on twitter, upvote/downvote
+- CD with docker/AWS
