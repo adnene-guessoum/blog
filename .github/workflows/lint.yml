@@ -1,0 +1,28 @@
+name: Lint code
+on: [push, pull_request]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: true
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: api lint
+        working-directory: ./api
+        run: |
+          task install
+          task lint
+
+      - name: frontend lint
+        working-directory: ./frontend
+        run: |
+          npm ci
+          npm run format
+          npm run lint
+
+
+ 
