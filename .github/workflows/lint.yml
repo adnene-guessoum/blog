@@ -36,11 +36,11 @@ jobs:
       - name: Install Dependencies
         run: |
           cd ./api
-          ./bin/task install
+          ../bin/task install
 
       - name: api lint
         run: |
-          ./bin/task lint
+          ../bin/task lint
 
       - name: frontend lint
         run: |
