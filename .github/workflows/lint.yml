@@ -34,18 +34,17 @@ jobs:
           python -m pip install --upgrade pip poetry
 
       - name: Install Dependencies
-        working-directory: ./api
         run: |
-          ./bin/task install
+          cd ./api
+          task install
 
       - name: api lint
-        working-directory: ./api
         run: |
-          ./bin/task lint
+          task lint
 
       - name: frontend lint
-        working-directory: ./frontend
         run: |
+          cd ../frontend
           npm ci
           npm run format
           npm run lint
